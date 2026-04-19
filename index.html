@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guardianes de Luz — El Portal</title>
+<meta name="description" content="Escuela de Magia Wiccana Ecléctica. Carolina González, Sacerdotisa de Luz. Despierta tu poder sanador.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════
+   BASE & VARIABLES
+═══════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --negro:    #05030a;
+  --void:     #080510;
+  --purp-1:   #1a0e2e;
+  --purp-2:   #2d1a4a;
+  --purp-3:   #4a2d7a;
+  --lila:     #9b70d4;
+  --lila-cl:  #c4a8ee;
+  --rosa:     #e060b0;
+  --dorado:   #d4a840;
+  --dorado-l: #f0cc78;
+  --crema:    #f5ede0;
+  --blanco:   #ffffff;
+  --serif:    'Cormorant Garamond', Georgia, serif;
+  --display:  'Cinzel Decorative', serif;
+  --sans:     'Inter', system-ui, sans-serif;
+}
+html { scroll-behavior:smooth; font-size:16px; }
+body {
+  background: var(--negro);
+  color: var(--crema);
+  font-family: var(--sans);
+  overflow-x: hidden;
+  cursor: none;
+}
+img { max-width:100%; display:block; }
+a { color:inherit; text-decoration:none; }
+ul { list-style:none; }
+button { cursor:none; border:none; background:none; font-family:inherit; }
+
+/* ═══════════════════════════════════════
+   CURSOR MÍSTICO
+═══════════════════════════════════════ */
+#cursor-outer {
+  position:fixed; z-index:9999; pointer-events:none;
+  width:32px; height:32px;
+  border:1px solid rgba(212,168,64,.5);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  transition:width .3s,height .3s,border-color .3s,transform .08s;
+  mix-blend-mode:screen;
+}
+#cursor-dot {
+  position:fixed; z-index:9999; pointer-events:none;
+  width:4px; height:4px;
+  background:var(--dorado-l);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+}
+body.cursor-hover #cursor-outer {
+  width:60px; height:60px;
+  border-color:rgba(212,168,64,.9);
+}
+
+/* ═══════════════════════════════════════
+   CANVAS DE FONDO (estrellas + niebla)
+═══════════════════════════════════════ */
+#bg-canvas {
+  position:fixed; inset:0; z-index:0;
+  pointer-events:none;
+}
+
+/* ═══════════════════════════════════════
+   NAV — minimalista, casi invisible
+═══════════════════════════════════════ */
+#nav {
+  position:fixed; top:0; left:0; right:0; z-index:500;
+  padding:1.4rem 5%;
+  display:flex; align-items:center; justify-content:space-between;
+  transition:background .5s, padding .4s;
+}
+#nav.oscuro {
+  background:rgba(5,3,10,.85);
+  backdrop-filter:blur(16px);
+  padding:1rem 5%;
+  border-bottom:1px solid rgba(212,168,64,.08);
+}
+.nav-sigil {
+  font-family:var(--serif);
+  font-size:.9rem;
+  color:var(--dorado);
+  letter-spacing:.25em;
+  opacity:.8;
+}
+.nav-links-d {
+  display:flex; gap:2.5rem;
+}
+.nav-links-d a {
+  font-size:.65rem;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:rgba(245,237,224,.4);
+  transition:color .3s;
+  position:relative;
+}
+.nav-links-d a::after {
+  content:''; position:absolute;
+  bottom:-3px; left:0; width:0; height:1px;
+  background:var(--dorado);
+  transition:width .35s;
+}
+.nav-links-d a:hover { color:var(--dorado-l); }
+.nav-links-d a:hover::after { width:100%; }
+.nav-wa {
+  font-size:.62rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--dorado);
+  border:1px solid rgba(212,168,64,.3);
+  padding:.45rem 1.2rem;
+  border-radius:40px;
+  transition:all .3s;
+}
+.nav-wa:hover { background:rgba(212,168,64,.1); border-color:var(--dorado); }
+.nav-burger { display:none; flex-direction:column; gap:5px; padding:4px; }
+.nav-burger span { display:block; width:20px; height:1px; background:var(--crema); border-radius:2px; transition:all .3s; }
+
+/* ═══════════════════════════════════════
+   MENÚ MÓVIL
+═══════════════════════════════════════ */
+#menu-m {
+  display:none; position:fixed; inset:0; z-index:700;
+  background:rgba(5,3,10,.97);
+  flex-direction:column; align-items:center; justify-content:center;
+  gap:2.2rem;
+}
+#menu-m.ab { display:flex; }
+#menu-m a {
+  font-family:var(--serif);
+  font-size:clamp(1.8rem,5vw,2.8rem);
+  color:var(--crema); font-style:italic; font-weight:300;
+  letter-spacing:.05em; transition:color .3s;
+}
+#menu-m a:hover { color:var(--dorado-l); }
+#menu-m-x { position:absolute; top:1.5rem; right:5%; font-size:1.4rem; color:var(--dorado); }
+
+/* ═══════════════════════════════════════
+   UMBRAL — elemento de transición entre secciones
+═══════════════════════════════════════ */
+.umbral {
+  display:flex; align-items:center; justify-content:center;
+  gap:1.5rem;
+  padding:1.5rem 0;
+  position:relative; z-index:2;
+}
+.umbral-linea {
+  flex:1; height:1px;
+  background:linear-gradient(to right, transparent, rgba(212,168,64,.2), transparent);
+}
+.umbral-sigil {
+  font-family:var(--serif);
+  font-size:.9rem;
+  color:rgba(212,168,64,.4);
+  letter-spacing:.4em;
+}
+
+/* ═══════════════════════════════════════
+   SECCIÓN I — EL PORTAL (HERO)
+═══════════════════════════════════════ */
+#portal {
+  position:relative; z-index:1;
+  min-height:100vh;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center;
+  padding:8rem 5% 4rem;
+  overflow:hidden;
+}
+.portal-vortex {
+  position:absolute; inset:0; pointer-events:none; overflow:hidden;
+}
+.portal-anillo {
+  position:absolute;
+  border-radius:50%;
+  border:1px solid;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  animation:girarAnillo linear infinite;
+}
+.portal-anillo:nth-child(1) { width:300px; height:300px; border-color:rgba(155,112,212,.15); animation-duration:40s; }
+.portal-anillo:nth-child(2) { width:500px; height:500px; border-color:rgba(212,168,64,.08); animation-duration:60s; animation-direction:reverse; }
+.portal-anillo:nth-child(3) { width:700px; height:700px; border-color:rgba(155,112,212,.06); animation-duration:90s; }
+.portal-anillo:nth-child(4) { width:950px; height:950px; border-color:rgba(212,168,64,.04); animation-duration:120s; animation-direction:reverse; }
+.portal-anillo:nth-child(5) { width:1200px; height:1200px; border-color:rgba(155,112,212,.03); animation-duration:180s; }
+@keyframes girarAnillo { to { transform:translate(-50%,-50%) rotate(360deg); } }
+
+.portal-luz {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:300px; height:300px;
+  background:radial-gradient(ellipse, rgba(100,50,180,.4) 0%, rgba(212,168,64,.15) 40%, transparent 70%);
+  border-radius:50%;
+  animation:respirarLuz 5s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes respirarLuz {
+  0%,100% { transform:translate(-50%,-50%) scale(1); opacity:.7; }
+  50%      { transform:translate(-50%,-50%) scale(1.15); opacity:1; }
+}
+
+.portal-eyebrow {
+  font-family:var(--sans);
+  font-size:.62rem;
+  letter-spacing:.38em;
+  text-transform:uppercase;
+  color:rgba(212,168,64,.6);
+  margin-bottom:2.5rem;
+  position:relative; z-index:2;
+  opacity:0; animation:revelarDesdeAbajo .9s .3s forwards;
+}
+.portal-h1 {
+  font-family:var(--display);
+  font-size:clamp(2.2rem,5vw,4.5rem);
+  font-weight:400;
+  line-height:1.1;
+  letter-spacing:.04em;
+  color:var(--crema);
+  position:relative; z-index:2;
+  margin-bottom:1rem;
+  opacity:0; animation:revelarDesdeAbajo 1s .5s forwards;
+}
+.portal-h1 span {
+  display:block;
+  background:linear-gradient(135deg, var(--dorado), var(--dorado-l), var(--lila-cl));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.portal-sub {
+  font-family:var(--serif);
+  font-size:clamp(1.1rem,2.5vw,1.5rem);
+  font-style:italic;
+  color:rgba(245,237,224,.55);
+  font-weight:300;
+  max-width:520px;
+  margin:0 auto 3rem;
+  line-height:1.75;
+  position:relative; z-index:2;
+  opacity:0; animation:revelarDesdeAbajo .9s .8s forwards;
+}
+.portal-cta-wrap {
+  position:relative; z-index:2;
+  opacity:0; animation:revelarDesdeAbajo .9s 1.1s forwards;
+}
+.btn-portal {
+  display:inline-flex; align-items:center; gap:.6rem;
+  padding:1rem 2.6rem;
+  background:linear-gradient(135deg, rgba(212,168,64,.15), rgba(155,112,212,.15));
+  border:1px solid rgba(212,168,64,.4);
+  border-radius:60px;
+  font-size:.75rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--dorado-l);
+  transition:all .4s;
+  font-family:var(--sans); font-weight:400;
+}
+.btn-portal:hover {
+  background:rgba(212,168,64,.12);
+  border-color:var(--dorado-l);
+  transform:translateY(-2px);
+  box-shadow:0 0 40px rgba(212,168,64,.15);
+}
+.portal-scroll-guia {
+  position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%);
+  z-index:2; display:flex; flex-direction:column; align-items:center; gap:.6rem;
+  opacity:0; animation:revelarDesdeAbajo 1s 1.8s forwards;
+}
+.scroll-guia-linea {
+  width:1px; height:50px;
+  background:linear-gradient(to bottom, rgba(212,168,64,.5), transparent);
+  animation:pulsarScroll 2.5s ease-in-out infinite;
+}
+@keyframes pulsarScroll {
+  0%,100% { opacity:.3; transform:scaleY(.8); }
+  50%      { opacity:1; transform:scaleY(1); }
+}
+.scroll-guia-txt {
+  font-size:.55rem; letter-spacing:.35em; text-transform:uppercase;
+  color:rgba(245,237,224,.25);
+}
+.portal-stats {
+  display:flex; align-items:center; gap:2.5rem;
+  margin-top:3.5rem; padding-top:2.5rem;
+  border-top:1px solid rgba(212,168,64,.1);
+  position:relative; z-index:2;
+  opacity:0; animation:revelarDesdeAbajo .8s 1.4s forwards;
+}
+.ps-item { text-align:center; }
+.ps-num {
+  font-family:var(--serif); font-style:italic;
+  font-size:2.8rem; font-weight:300;
+  color:var(--dorado-l); line-height:1;
+  display:block;
+}
+.ps-lbl {
+  font-size:.6rem; letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(245,237,224,.3);
+}
+.ps-sep { width:1px; height:40px; background:rgba(212,168,64,.15); }
+
+@keyframes revelarDesdeAbajo {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:none; }
+}
+
+/* ═══════════════════════════════════════
+   SECCIÓN II — EL LLAMADO (sobre mí)
+   EFECTO: la figura emerge de la oscuridad
+═══════════════════════════════════════ */
+#el-llamado {
+  position:relative; z-index:1;
+  padding:8rem 0;
+  background:linear-gradient(to bottom, var(--negro), var(--purp-1));
+}
+.llamado-grid {
+  width:90%; max-width:1080px; margin:0 auto;
+  display:grid; grid-template-columns:1fr 1.2fr;
+  gap:5rem; align-items:center;
+}
+.llamado-img-wrap {
+  position:relative;
+}
+.llamado-img-frame {
+  position:relative;
+  width:100%; aspect-ratio:3/4;
+  border-radius:50% 50% 40% 40%;
+  overflow:hidden;
+  background:linear-gradient(160deg, var(--purp-2), var(--negro));
+  border:1px solid rgba(155,112,212,.2);
+}
+.llamado-img-frame img {
+  width:100%; height:100%; object-fit:cover; object-position:center top;
+  transition:filter 1.5s;
+}
+.llamado-img-frame .foto-placeholder {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:.8rem; color:rgba(155,112,212,.3);
+  font-size:.65rem; letter-spacing:.2em; text-transform:uppercase;
+}
+/* Velo que se revela con scroll */
+.llamado-velo {
+  position:absolute; inset:0;
+  background:radial-gradient(ellipse at center, transparent 0%, var(--negro) 75%);
+  border-radius:50% 50% 40% 40%;
+  transition:opacity 1.2s;
+  pointer-events:none;
+}
+.llamado-img-wrap.revelado .llamado-velo { opacity:0; }
+.llamado-orbe {
+  position:absolute;
+  border-radius:50%; border:1px solid rgba(212,168,64,.12);
+  animation:girarAnillo 20s linear infinite;
+}
+.llamado-orbe1 { width:105%; aspect-ratio:1; top:50%; left:50%; transform:translate(-50%,-50%); }
+.llamado-orbe2 { width:120%; aspect-ratio:1; top:50%; left:50%; transform:translate(-50%,-50%); animation-duration:35s; animation-direction:reverse; }
+
+/* Revelación de texto — las palabras aparecen una a una */
+.llamado-texto { opacity:0; transform:translateX(30px); transition:all 1s .2s; }
+.llamado-texto.visible { opacity:1; transform:none; }
+.llamado-eyebrow {
+  font-size:.62rem; letter-spacing:.3em; text-transform:uppercase;
+  color:var(--dorado); margin-bottom:1rem; display:block;
+}
+.llamado-h2 {
+  font-family:var(--serif);
+  font-size:clamp(2rem,3.5vw,3rem);
+  font-weight:300; font-style:italic;
+  color:var(--crema); line-height:1.15;
+  margin-bottom:1.8rem;
+}
+.llamado-h2 strong { font-weight:400; font-style:normal; color:var(--dorado-l); }
+.llamado-p {
+  font-size:.97rem; color:rgba(245,237,224,.6);
+  font-weight:300; line-height:1.9; margin-bottom:1rem;
+}
+.llamado-creds {
+  margin:2rem 0;
+  display:flex; flex-direction:column; gap:.7rem;
+}
+.cred-row {
+  display:flex; align-items:center; gap:.8rem;
+  padding:.7rem 0; border-bottom:1px solid rgba(155,112,212,.1);
+  opacity:0; transform:translateX(10px);
+  transition:opacity .6s, transform .6s;
+}
+.cred-row.visible { opacity:1; transform:none; }
+.cred-ico { color:var(--dorado); font-size:.8rem; flex-shrink:0; }
+.cred-txt { font-size:.85rem; color:rgba(245,237,224,.55); font-weight:300; line-height:1.45; }
+.btn-sutil {
+  display:inline-flex; align-items:center; gap:.5rem;
+  font-size:.7rem; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--lila-cl); border-bottom:1px solid rgba(155,112,212,.3);
+  padding-bottom:2px; transition:all .3s;
+}
+.btn-sutil:hover { color:var(--dorado-l); border-color:var(--dorado); }
+
+/* ═══════════════════════════════════════
+   SECCIÓN III — EL SENDERO (servicios)
+   EFECTO: cards emergen del fondo en cascada
+═══════════════════════════════════════ */
+#el-sendero {
+  position:relative; z-index:1;
+  padding:8rem 0;
+  background:linear-gradient(to bottom, var(--purp-1), var(--purp-2) 50%, var(--purp-1));
+}
+.sendero-header {
+  text-align:center; margin-bottom:5rem;
+  width:90%; max-width:700px; margin-left:auto; margin-right:auto;
+}
+.sendero-pre {
+  font-size:.62rem; letter-spacing:.35em; text-transform:uppercase;
+  color:rgba(212,168,64,.5); margin-bottom:1.5rem; display:block;
+}
+.sendero-h2 {
+  font-family:var(--serif);
+  font-size:clamp(1.8rem,3.5vw,2.8rem);
+  font-weight:300; font-style:italic;
+  color:var(--crema); line-height:1.2;
+  margin-bottom:1rem;
+}
+.sendero-h2 em { color:var(--dorado-l); }
+.sendero-desc {
+  font-size:.9rem; color:rgba(245,237,224,.45);
+  font-weight:300; line-height:1.8;
+}
+.sendero-cards {
+  width:90%; max-width:1080px; margin:0 auto;
+  display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem;
+}
+.sendero-card {
+  background:rgba(5,3,10,.6);
+  border:1px solid rgba(155,112,212,.15);
+  border-radius:20px;
+  padding:2.5rem 2rem;
+  position:relative; overflow:hidden;
+  transition:all .5s;
+  opacity:0; transform:translateY(30px);
+}
+.sendero-card.visible { opacity:1; transform:none; }
+.sendero-card::before {
+  content:''; position:absolute;
+  inset:0; border-radius:20px;
+  background:radial-gradient(ellipse at top left, rgba(155,112,212,.06), transparent 60%);
+  pointer-events:none;
+}
+.sendero-card::after {
+  content:''; position:absolute;
+  top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg, transparent, rgba(212,168,64,.3), transparent);
+  transform:scaleX(0); transform-origin:center;
+  transition:transform .5s;
+}
+.sendero-card:hover { border-color:rgba(155,112,212,.4); transform:translateY(-4px); box-shadow:0 20px 60px rgba(74,45,122,.3); }
+.sendero-card:hover::after { transform:scaleX(1); }
+.sc-numero {
+  font-family:var(--serif); font-style:italic; font-size:3rem;
+  color:rgba(155,112,212,.15); line-height:1;
+  position:absolute; top:1.5rem; right:2rem;
+}
+.sc-glyph { font-size:1.6rem; margin-bottom:1.2rem; display:block; }
+.sc-h3 {
+  font-family:var(--serif); font-size:1.4rem; font-weight:400;
+  color:var(--crema); margin-bottom:.7rem;
+}
+.sc-p {
+  font-size:.88rem; color:rgba(245,237,224,.5);
+  font-weight:300; line-height:1.75; margin-bottom:1.2rem;
+}
+.sc-beneficio {
+  display:inline-block; font-size:.68rem; font-weight:400;
+  color:var(--dorado); letter-spacing:.08em;
+  margin-bottom:1.5rem;
+}
+.sc-cta {
+  display:inline-flex; align-items:center; gap:.4rem;
+  font-size:.68rem; letter-spacing:.15em; text-transform:uppercase;
+  color:rgba(196,168,238,.7); transition:all .3s;
+}
+.sc-cta:hover { color:var(--dorado-l); gap:.7rem; }
+
+/* ═══════════════════════════════════════
+   SECCIÓN IV — LOS MISTERIOS (cursos)
+   EFECTO: revelaciόn dramática, card por card
+═══════════════════════════════════════ */
+#los-misterios {
+  position:relative; z-index:1;
+  padding:0;
+  background:var(--negro);
+}
+
+/* Intro dramática */
+.misterios-intro {
+  text-align:center;
+  padding:8rem 5% 4rem;
+  position:relative;
+}
+.misterios-intro::before {
+  content:''; position:absolute;
+  top:0; left:50%; transform:translateX(-50%);
+  width:1px; height:100px;
+  background:linear-gradient(to bottom, rgba(212,168,64,.3), transparent);
+}
+.misterios-subtitulo {
+  font-size:.62rem; letter-spacing:.38em; text-transform:uppercase;
+  color:rgba(212,168,64,.5); margin-bottom:1.5rem; display:block;
+}
+.misterios-h2 {
+  font-family:var(--display); font-size:clamp(1.6rem,3.5vw,3rem);
+  font-weight:400; color:var(--crema); line-height:1.2;
+  margin-bottom:1rem;
+}
+.misterios-bajada {
+  font-family:var(--serif); font-style:italic;
+  font-size:1.1rem; color:rgba(245,237,224,.4);
+  font-weight:300;
+}
+
+/* Curso — experiencia inmersiva full-width */
+.curso-portal {
+  position:relative;
+  padding:6rem 0;
+  overflow:hidden;
+}
+.curso-portal + .curso-portal {
+  border-top:1px solid rgba(155,112,212,.08);
+}
+.curso-portal-bg {
+  position:absolute; inset:0; pointer-events:none;
+}
+.bg-grad-1 {
+  background:radial-gradient(ellipse 60% 80% at 20% 50%, rgba(74,45,122,.35), transparent);
+}
+.bg-grad-2 {
+  background:radial-gradient(ellipse 60% 80% at 80% 50%, rgba(180,60,120,.2), transparent);
+}
+.curso-portal-inner {
+  width:90%; max-width:1080px; margin:0 auto;
+  position:relative; z-index:1;
+  display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center;
+}
+.curso-portal-inner.invertido { direction:rtl; }
+.curso-portal-inner.invertido > * { direction:ltr; }
+
+/* Lado visual del curso */
+.curso-visual {
+  position:relative;
+  opacity:0; transform:scale(.94);
+  transition:opacity 1s, transform 1s;
+}
+.curso-visual.visible { opacity:1; transform:scale(1); }
+.curso-img-wrap {
+  aspect-ratio:3/4;
+  border-radius:24px; overflow:hidden;
+  background:var(--purp-1);
+  border:1px solid rgba(155,112,212,.2);
+  display:flex; align-items:center; justify-content:center;
+  position:relative;
+}
+.curso-img-wrap img { width:100%; height:100%; object-fit:cover; }
+.ci-placeholder {
+  display:flex; flex-direction:column; align-items:center; gap:1rem;
+  color:rgba(155,112,212,.3); padding:2rem; text-align:center;
+}
+.ci-placeholder span:first-child { font-size:4rem; }
+.ci-placeholder span:last-child {
+  font-size:.6rem; letter-spacing:.2em; text-transform:uppercase;
+}
+.curso-badge-flotante {
+  position:absolute; bottom:2rem; left:50%; transform:translateX(-50%);
+  background:rgba(5,3,10,.85); backdrop-filter:blur(8px);
+  border:1px solid rgba(212,168,64,.2); border-radius:40px;
+  padding:.5rem 1.4rem; white-space:nowrap;
+  font-family:var(--serif); font-size:.95rem; font-style:italic;
+  color:var(--dorado-l); letter-spacing:.08em;
+}
+.curso-anillos {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.curso-anillo {
+  position:absolute; border-radius:50%; border:1px solid;
+  top:50%; left:50%; transform:translate(-50%,-50%);
+}
+.curso-anillo:nth-child(1) { width:110%; aspect-ratio:1; border-color:rgba(212,168,64,.07); animation:girarAnillo 25s linear infinite; }
+.curso-anillo:nth-child(2) { width:130%; aspect-ratio:1; border-color:rgba(155,112,212,.05); animation:girarAnillo 40s linear infinite reverse; }
+
+/* Lado de contenido del curso */
+.curso-contenido-portal {
+  opacity:0; transform:translateX(20px);
+  transition:opacity 1s .2s, transform 1s .2s;
+}
+.curso-contenido-portal.visible { opacity:1; transform:none; }
+.cursor-portal-inner.invertido .curso-contenido-portal { transform:translateX(-20px); }
+.c-eyebrow {
+  font-size:.6rem; letter-spacing:.3em; text-transform:uppercase;
+  color:var(--dorado); margin-bottom:.8rem; display:block;
+}
+.c-titulo {
+  font-family:var(--display);
+  font-size:clamp(1.5rem,2.5vw,2.2rem);
+  font-weight:400; color:var(--crema);
+  line-height:1.15; margin-bottom:.6rem;
+}
+.c-eslogan {
+  font-family:var(--serif); font-style:italic;
+  font-size:1.05rem; color:var(--lila-cl);
+  font-weight:300; margin-bottom:1.5rem;
+}
+.c-desc {
+  font-size:.93rem; color:rgba(245,237,224,.55);
+  font-weight:300; line-height:1.9; margin-bottom:2rem;
+}
+/* Revelación progresiva de bullets */
+.c-bullets {
+  display:flex; flex-direction:column; gap:.6rem; margin-bottom:2rem;
+}
+.c-bullet {
+  display:flex; align-items:flex-start; gap:.8rem;
+  font-size:.88rem; color:var(--crema);
+  font-weight:300; line-height:1.5;
+  padding:.6rem 0; border-bottom:1px solid rgba(155,112,212,.1);
+  opacity:0; transform:translateX(10px);
+  transition:opacity .5s, transform .5s;
+}
+.c-bullet.visible { opacity:1; transform:none; }
+.c-bullet-ico { color:var(--dorado); font-size:.75rem; margin-top:.15rem; flex-shrink:0; }
+/* Info del curso */
+.c-info-row {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:.8rem;
+  margin-bottom:2rem;
+}
+.c-info-item {
+  background:rgba(155,112,212,.07);
+  border:1px solid rgba(155,112,212,.12);
+  border-radius:12px; padding:.9rem .8rem;
+  text-align:center;
+}
+.c-info-item strong {
+  display:block; font-family:var(--serif); font-size:1.1rem; font-style:italic;
+  color:var(--dorado-l); margin-bottom:.2rem;
+}
+.c-info-item span {
+  font-size:.65rem; letter-spacing:.12em; text-transform:uppercase;
+  color:rgba(245,237,224,.35);
+}
+/* Precio */
+.c-precio-bloque {
+  display:flex; align-items:center; justify-content:space-between;
+  gap:1.5rem; flex-wrap:wrap;
+  background:rgba(212,168,64,.06); border:1px solid rgba(212,168,64,.15);
+  border-radius:16px; padding:1.4rem;
+  margin-bottom:1.8rem;
+}
+.c-precio-num {
+  font-family:var(--serif); font-size:2.2rem; font-style:italic;
+  color:var(--dorado-l); line-height:1;
+}
+.c-precio-det { font-size:.72rem; color:rgba(245,237,224,.35); font-weight:300; }
+.c-btns { display:flex; flex-wrap:wrap; gap:.75rem; }
+.btn-iniciar {
+  display:inline-flex; align-items:center; gap:.6rem;
+  padding:.9rem 2rem;
+  background:linear-gradient(135deg, var(--dorado) 0%, var(--dorado-l) 100%);
+  color:var(--negro); border-radius:40px;
+  font-size:.75rem; font-weight:500; letter-spacing:.12em; text-transform:uppercase;
+  font-family:var(--sans); border:none;
+  transition:all .35s;
+}
+.btn-iniciar:hover { filter:brightness(1.1); transform:translateY(-2px); box-shadow:0 8px 30px rgba(212,168,64,.3); }
+.btn-saber {
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding:.9rem 1.8rem;
+  background:transparent; color:var(--lila-cl);
+  border:1px solid rgba(155,112,212,.35); border-radius:40px;
+  font-size:.75rem; letter-spacing:.12em; text-transform:uppercase;
+  font-family:var(--sans); transition:all .35s;
+}
+.btn-saber:hover { border-color:var(--lila); color:var(--crema); }
+
+/* Bloque PRÓXIMAMENTE */
+.proximo-bloque {
+  margin-top:2rem;
+  background:linear-gradient(135deg, rgba(74,45,122,.4), rgba(180,60,120,.15));
+  border:1px solid rgba(155,112,212,.25);
+  border-radius:16px; padding:1.6rem;
+  position:relative; overflow:hidden;
+}
+.proximo-bloque::before {
+  content:''; position:absolute;
+  top:-30px; right:-30px; width:120px; height:120px;
+  border-radius:50%; border:1px solid rgba(212,168,64,.08);
+}
+.prox-badge {
+  display:inline-flex; align-items:center; gap:.5rem;
+  background:rgba(224,96,176,.15); border:1px solid rgba(224,96,176,.3);
+  border-radius:40px; padding:.25rem .9rem;
+  font-size:.6rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--magenta-suave, #f090d0); margin-bottom:.8rem;
+}
+.prox-dot {
+  width:5px; height:5px; border-radius:50%;
+  background:#e060b0; animation:parpadeo 1.5s infinite;
+}
+@keyframes parpadeo { 0%,100%{opacity:1}50%{opacity:.2} }
+.prox-h { font-family:var(--serif); font-size:1.2rem; font-style:italic; color:var(--crema); margin-bottom:.5rem; }
+.prox-p { font-size:.85rem; color:rgba(245,237,224,.5); font-weight:300; line-height:1.7; margin-bottom:1.2rem; }
+
+/* ═══════════════════════════════════════
+   SECCIÓN V — LAS VOCES (testimonios)
+   EFECTO: aparecen desde el fondo como visiones
+═══════════════════════════════════════ */
+#las-voces {
+  position:relative; z-index:1;
+  padding:8rem 0;
+  background:linear-gradient(to bottom, var(--negro), var(--purp-1));
+}
+.voces-header {
+  text-align:center; margin-bottom:5rem;
+  width:90%; max-width:600px; margin-left:auto; margin-right:auto;
+}
+.voces-pre {
+  font-size:.6rem; letter-spacing:.35em; text-transform:uppercase;
+  color:rgba(212,168,64,.5); margin-bottom:1.2rem; display:block;
+}
+.voces-h2 {
+  font-family:var(--serif); font-size:clamp(1.8rem,3vw,2.6rem);
+  font-weight:300; font-style:italic; color:var(--crema); line-height:1.2;
+}
+.voces-h2 em { color:var(--dorado-l); font-weight:400; }
+.voces-grid {
+  width:90%; max-width:1080px; margin:0 auto;
+  display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem;
+}
+.voz-card {
+  background:rgba(5,3,10,.5);
+  border:1px solid rgba(155,112,212,.1);
+  border-radius:20px; padding:2.2rem;
+  position:relative; overflow:hidden;
+  opacity:0; transform:translateY(20px) scale(.98);
+  transition:opacity .8s, transform .8s;
+}
+.voz-card.visible { opacity:1; transform:none; }
+.voz-card.destacada {
+  border-color:rgba(212,168,64,.15);
+  background:rgba(212,168,64,.03);
+}
+.voz-card::before {
+  content:'"'; position:absolute;
+  top:1rem; right:1.5rem;
+  font-family:var(--serif); font-size:6rem;
+  color:rgba(155,112,212,.07); line-height:1;
+}
+.voz-estrellas { color:var(--dorado); font-size:.85rem; letter-spacing:.12em; margin-bottom:1rem; }
+.voz-texto {
+  font-family:var(--serif); font-size:1.05rem; font-style:italic;
+  color:rgba(245,237,224,.78); line-height:1.75;
+  margin-bottom:1.5rem; font-weight:300;
+}
+.voz-autora { display:flex; align-items:center; gap:.8rem; }
+.voz-av {
+  width:36px; height:36px; border-radius:50%;
+  background:var(--purp-2); border:1px solid rgba(155,112,212,.3);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--serif); font-size:.85rem; color:var(--lila-cl);
+  font-style:italic; flex-shrink:0;
+}
+.voz-nombre { font-size:.72rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--crema); display:block; }
+.voz-servicio { font-size:.68rem; color:var(--dorado); font-weight:300; }
+
+/* ═══════════════════════════════════════
+   SECCIÓN VI — EL UMBRAL FINAL (CTA)
+   EFECTO: portal de luz que se abre
+═══════════════════════════════════════ */
+#el-umbral-final {
+  position:relative; z-index:1;
+  padding:10rem 0;
+  background:var(--negro);
+  text-align:center;
+  overflow:hidden;
+}
+.uf-luz {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:600px; height:600px;
+  background:radial-gradient(ellipse, rgba(74,45,122,.5) 0%, rgba(212,168,64,.1) 40%, transparent 70%);
+  border-radius:50%; pointer-events:none;
+  animation:respirarLuz 6s ease-in-out infinite;
+}
+.uf-anillos { position:absolute; top:50%; left:50%; pointer-events:none; }
+.uf-anillo {
+  position:absolute; border-radius:50%; border:1px solid;
+  top:50%; left:50%; transform:translate(-50%,-50%);
+}
+.uf-anillo:nth-child(1){ width:400px;height:400px;border-color:rgba(155,112,212,.08);animation:girarAnillo 30s linear infinite; }
+.uf-anillo:nth-child(2){ width:600px;height:600px;border-color:rgba(212,168,64,.05);animation:girarAnillo 50s linear infinite reverse; }
+.uf-anillo:nth-child(3){ width:800px;height:800px;border-color:rgba(155,112,212,.04);animation:girarAnillo 80s linear infinite; }
+.uf-inner {
+  position:relative; z-index:1;
+  width:90%; max-width:640px; margin:0 auto;
+  opacity:0; transform:translateY(20px);
+  transition:opacity 1s, transform 1s;
+}
+.uf-inner.visible { opacity:1; transform:none; }
+.uf-sigil {
+  font-family:var(--serif); font-size:1.2rem;
+  color:var(--dorado); letter-spacing:.4em;
+  margin-bottom:2rem; display:block;
+  animation:respirarLuz 4s ease-in-out infinite;
+}
+.uf-h2 {
+  font-family:var(--display); font-size:clamp(2rem,5vw,3.8rem);
+  font-weight:400; color:var(--crema); line-height:1.1; margin-bottom:1.5rem;
+}
+.uf-h2 span {
+  display:block;
+  background:linear-gradient(135deg, var(--dorado), var(--dorado-l));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.uf-sub {
+  font-family:var(--serif); font-style:italic;
+  font-size:1.1rem; color:rgba(245,237,224,.5);
+  font-weight:300; line-height:1.8; margin-bottom:3rem;
+}
+.uf-btns { display:flex; flex-wrap:wrap; gap:.8rem; justify-content:center; }
+.btn-portal-grande {
+  display:inline-flex; align-items:center; gap:.7rem;
+  padding:1.1rem 2.8rem;
+  background:linear-gradient(135deg, var(--dorado), var(--dorado-l));
+  color:var(--negro); border-radius:60px;
+  font-size:.8rem; font-weight:500; letter-spacing:.15em; text-transform:uppercase;
+  font-family:var(--sans); transition:all .4s;
+}
+.btn-portal-grande:hover { filter:brightness(1.1); transform:translateY(-3px); box-shadow:0 12px 40px rgba(212,168,64,.35); }
+.uf-tel { margin-top:2rem; font-family:var(--serif); font-style:italic; font-size:1rem; color:rgba(245,237,224,.25); }
+
+/* ═══════════════════════════════════════
+   CONTACTO
+═══════════════════════════════════════ */
+#el-contacto {
+  position:relative; z-index:1;
+  padding:7rem 0;
+  background:var(--void);
+  border-top:1px solid rgba(155,112,212,.08);
+}
+.contacto-wrap { width:90%; max-width:900px; margin:0 auto; display:grid; grid-template-columns:1fr 1.2fr; gap:5rem; align-items:start; }
+.c-info { opacity:0; transform:translateY(20px); transition:all .8s; }
+.c-info.visible { opacity:1; transform:none; }
+.c-info-eyebrow { font-size:.6rem; letter-spacing:.3em; text-transform:uppercase; color:var(--dorado); margin-bottom:1rem; display:block; }
+.c-info-h { font-family:var(--serif); font-size:clamp(1.6rem,3vw,2.4rem); font-weight:300; font-style:italic; color:var(--crema); line-height:1.2; margin-bottom:1.2rem; }
+.c-info-p { font-size:.9rem; color:rgba(245,237,224,.45); font-weight:300; line-height:1.85; margin-bottom:2rem; }
+.c-dato { display:flex; align-items:center; gap:.8rem; font-size:.88rem; color:rgba(245,237,224,.45); font-weight:300; margin-bottom:.7rem; transition:color .3s; }
+a.c-dato:hover { color:var(--dorado-l); }
+.c-dato-ico { font-size:1rem; flex-shrink:0; }
+.form-portal { opacity:0; transform:translateY(20px); transition:all .8s .2s; }
+.form-portal.visible { opacity:1; transform:none; }
+.form-portal-card {
+  background:rgba(26,14,46,.4); border:1px solid rgba(155,112,212,.15);
+  border-radius:20px; padding:2.2rem;
+}
+.fp-fila { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.fp-grupo { margin-bottom:1.1rem; }
+.fp-grupo label { display:block; font-size:.65rem; letter-spacing:.2em; text-transform:uppercase; color:rgba(155,112,212,.7); margin-bottom:.4rem; }
+.fp-grupo input, .fp-grupo textarea, .fp-grupo select {
+  width:100%; padding:.78rem 1rem;
+  background:rgba(255,255,255,.03); border:1.5px solid rgba(155,112,212,.18);
+  border-radius:10px; color:var(--crema);
+  font-family:var(--sans); font-size:.88rem; font-weight:300;
+  outline:none; transition:border-color .3s, box-shadow .3s;
+}
+.fp-grupo input::placeholder, .fp-grupo textarea::placeholder { color:rgba(245,237,224,.2); }
+.fp-grupo input:focus, .fp-grupo textarea:focus, .fp-grupo select:focus { border-color:var(--lila); box-shadow:0 0 0 3px rgba(155,112,212,.1); }
+.fp-grupo select option { background:var(--purp-1); color:var(--crema); }
+.fp-grupo textarea { min-height:90px; resize:vertical; }
+.fp-ok { display:none; text-align:center; padding:1.4rem; background:rgba(155,112,212,.1); border:1px solid rgba(155,112,212,.2); border-radius:12px; font-family:var(--serif); font-style:italic; color:var(--dorado-l); font-size:1rem; margin-top:1rem; }
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+footer {
+  background:var(--negro); border-top:1px solid rgba(212,168,64,.08);
+  padding:4rem 5% 2rem;
+}
+.footer-inner {
+  width:100%; max-width:1080px; margin:0 auto;
+  display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:3rem;
+  margin-bottom:3rem;
+}
+.f-logo { font-family:var(--display); font-size:.85rem; color:var(--crema); letter-spacing:.06em; margin-bottom:.6rem; }
+.f-desc { font-size:.8rem; color:rgba(245,237,224,.28); font-weight:300; line-height:1.8; margin-bottom:.4rem; }
+.f-fac { font-family:var(--serif); font-style:italic; font-size:.85rem; color:var(--dorado); }
+.f-col h4 { font-size:.58rem; letter-spacing:.25em; text-transform:uppercase; color:rgba(245,237,224,.25); margin-bottom:1.1rem; }
+.f-col a { display:block; font-size:.8rem; color:rgba(245,237,224,.38); font-weight:300; margin-bottom:.55rem; transition:color .3s; }
+.f-col a:hover { color:var(--dorado-l); }
+.footer-bottom { border-top:1px solid rgba(255,255,255,.05); padding-top:1.8rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
+.f-copy { font-size:.68rem; color:rgba(245,237,224,.18); letter-spacing:.06em; }
+.f-eslogan { font-family:var(--serif); font-style:italic; font-size:.8rem; color:rgba(212,168,64,.25); }
+
+/* WA flotante */
+.wa-float {
+  position:fixed; bottom:2rem; right:2rem; z-index:600;
+  width:54px; height:54px; background:#25d366; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 4px 24px rgba(37,211,102,.4);
+  transition:all .3s; animation:entradaWa .7s 3s cubic-bezier(.34,1.56,.64,1) both;
+}
+.wa-float svg { width:26px; height:26px; fill:white; }
+.wa-float:hover { transform:scale(1.12); box-shadow:0 8px 32px rgba(37,211,102,.5); }
+@keyframes entradaWa { from{transform:scale(0) rotate(-90deg);opacity:0} to{transform:scale(1);opacity:1} }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:900px){
+  .llamado-grid { grid-template-columns:1fr; gap:3rem; }
+  .curso-portal-inner, .curso-portal-inner.invertido { grid-template-columns:1fr; direction:ltr; }
+  .sendero-cards { grid-template-columns:1fr; }
+  .voces-grid { grid-template-columns:1fr; }
+  .contacto-wrap { grid-template-columns:1fr; gap:3rem; }
+  .footer-inner { grid-template-columns:1fr 1fr; gap:2rem; }
+  .nav-links-d { display:none; }
+  .nav-burger { display:flex; }
+  .c-info-row { grid-template-columns:1fr 1fr; }
+}
+@media(max-width:600px){
+  .portal-stats { flex-direction:column; gap:1.5rem; }
+  .footer-inner { grid-template-columns:1fr; }
+  .fp-fila { grid-template-columns:1fr; }
+  .c-info-row { grid-template-columns:1fr; }
+  .c-precio-bloque { flex-direction:column; }
+  .uf-btns { flex-direction:column; align-items:center; }
+  .curso-portal-inner { gap:3rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cursor-outer"></div>
+<div id="cursor-dot"></div>
+
+<!-- Canvas de fondo -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- ══════════════════════════════════════
+     NAV
+══════════════════════════════════════ -->
+<nav id="nav">
+  <span class="nav-sigil">☽ ✦ ☾</span>
+  <div class="nav-links-d">
+    <a href="#el-llamado">Carolina</a>
+    <a href="#el-sendero">Servicios</a>
+    <a href="#los-misterios">Cursos</a>
+    <a href="#las-voces">Testimonios</a>
+    <a href="#el-contacto">Contacto</a>
+    <a href="https://wa.me/56981620907?text=Hola%20Carolina,%20quiero%20información%20sobre%20tus%20cursos"
+       class="nav-wa" target="_blank" rel="noopener">Reservar cupo</a>
+  </div>
+  <button class="nav-burger" id="burger" aria-label="Menú" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div id="menu-m">
+  <button id="menu-x" aria-label="Cerrar">✕</button>
+  <a href="#el-llamado">Carolina</a>
+  <a href="#el-sendero">Servicios</a>
+  <a href="#los-misterios">Cursos</a>
+  <a href="#las-voces">Testimonios</a>
+  <a href="#el-contacto">Contacto</a>
+  <a href="https://wa.me/56981620907?text=Hola%20Carolina" target="_blank" rel="noopener" style="font-size:.9rem;background:linear-gradient(135deg,#d4a840,#f0cc78);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:normal;letter-spacing:.1em;text-transform:uppercase;">Reservar cupo ✦</a>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     I. EL PORTAL — HERO
+══════════════════════════════════════ -->
+<section id="portal">
+  <div class="portal-vortex" aria-hidden="true">
+    <div class="portal-anillo"></div>
+    <div class="portal-anillo"></div>
+    <div class="portal-anillo"></div>
+    <div class="portal-anillo"></div>
+    <div class="portal-anillo"></div>
+  </div>
+  <div class="portal-luz" aria-hidden="true"></div>
+
+  <span class="portal-eyebrow">Escuela de Magia Wiccana Ecléctica</span>
+
+  <h1 class="portal-h1">
+    Guardianes<br>
+    <span>de Luz</span>
+  </h1>
+
+  <p class="portal-sub">
+    El despertar de tu poder sanador.<br>
+    Un portal hacia quien ya eres.
+  </p>
+
+  <div class="portal-cta-wrap">
+    <a href="#el-llamado" class="btn-portal">
+      Entrar al portal ✦
+    </a>
+  </div>
+
+  <div class="portal-stats">
+    <div class="ps-item">
+      <span class="ps-num" data-target="500" data-suffix="+">0+</span>
+      <span class="ps-lbl">Alumnas</span>
+    </div>
+    <div class="ps-sep" aria-hidden="true"></div>
+    <div class="ps-item">
+      <span class="ps-num" data-target="20" data-suffix="+">0+</span>
+      <span class="ps-lbl">Años de práctica</span>
+    </div>
+    <div class="ps-sep" aria-hidden="true"></div>
+    <div class="ps-item">
+      <span class="ps-num" data-target="2" data-suffix="">0</span>
+      <span class="ps-lbl">Cursos activos</span>
+    </div>
+  </div>
+
+  <div class="portal-scroll-guia" aria-hidden="true">
+    <div class="scroll-guia-linea"></div>
+    <span class="scroll-guia-txt">Descender</span>
+  </div>
+</section>
+
+
+<!-- Umbral 1 -->
+<div class="umbral" aria-hidden="true"><div class="umbral-linea"></div><span class="umbral-sigil">☽ I ☾</span><div class="umbral-linea"></div></div>
+
+
+<!-- ══════════════════════════════════════
+     II. EL LLAMADO — SOBRE CAROLINA
+══════════════════════════════════════ -->
+<section id="el-llamado">
+  <div class="llamado-grid">
+
+    <div class="llamado-img-wrap" id="llamado-img">
+      <div class="llamado-img-frame">
+        <!-- CAMBIAR: reemplaza con foto real de Carolina -->
+        <img src="assets/img/carolina-gonzalez.jpg" alt="Carolina González, Sacerdotisa de Luz" loading="lazy"
+             onerror="this.style.display='none'">
+        <div class="foto-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=".7" width="60" height="60"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          <span>Carolina González</span>
+        </div>
+      </div>
+      <div class="llamado-velo" id="llamado-velo"></div>
+      <div class="llamado-orbe llamado-orbe1" aria-hidden="true"></div>
+      <div class="llamado-orbe llamado-orbe2" aria-hidden="true"></div>
+    </div>
+
+    <div class="llamado-texto" id="llamado-texto">
+      <span class="llamado-eyebrow">✦ El llamado</span>
+      <h2 class="llamado-h2">
+        Soy Carolina González<br>
+        <strong>Sacerdotisa de Luz</strong><br>
+        y terapeuta holístico integral
+      </h2>
+      <p class="llamado-p">
+        Llevo más de 20 años caminando el sendero de la magia wiccana ecléctica,
+        el tarot terapéutico y la sanación energética. No enseño rituales de memoria.
+        Enseño a recordar el poder que ya habita en ti.
+      </p>
+      <p class="llamado-p">
+        Mi misión es acompañarte en el despertar de tu intuición, tu magia y tu
+        capacidad sanadora. Porque la magia no está afuera — está en ti, esperando
+        ser despertada con intención, conocimiento y amor propio.
+      </p>
+      <div class="llamado-creds">
+        <div class="cred-row" data-delay="0"><span class="cred-ico">✦</span><span class="cred-txt">Sacerdotisa de Luz y Terapeuta Holístico Integral</span></div>
+        <div class="cred-row" data-delay="100"><span class="cred-ico">✦</span><span class="cred-txt">Fundadora de Guardianes de Luz — Escuela de Magia Wiccana</span></div>
+        <div class="cred-row" data-delay="200"><span class="cred-ico">✦</span><span class="cred-txt">Facilitadora de Tarot Rider Waite Terapéutico</span></div>
+        <div class="cred-row" data-delay="300"><span class="cred-ico">✦</span><span class="cred-txt">Más de 500 alumnas acompañadas en su despertar</span></div>
+      </div>
+      <a href="#los-misterios" class="btn-sutil">Ver mis cursos →</a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- Umbral 2 -->
+<div class="umbral" aria-hidden="true"><div class="umbral-linea"></div><span class="umbral-sigil">☽ II ☾</span><div class="umbral-linea"></div></div>
+
+
+<!-- ══════════════════════════════════════
+     III. EL SENDERO — SERVICIOS
+══════════════════════════════════════ -->
+<section id="el-sendero">
+  <div class="sendero-header">
+    <span class="sendero-pre">✦ El sendero</span>
+    <h2 class="sendero-h2">Servicios <em>individuales</em></h2>
+    <p class="sendero-desc">Para quienes necesitan acompañamiento directo, presencial en su camino espiritual.</p>
+  </div>
+  <div class="sendero-cards">
+
+    <article class="sendero-card" data-delay="0">
+      <span class="sc-numero">I</span>
+      <span class="sc-glyph">🃏</span>
+      <h3 class="sc-h3">Lectura de Tarot</h3>
+      <p class="sc-p">Tiradas profundas e intuitivas que te dan claridad sobre tu presente, tu camino y los mensajes que el universo tiene para ti. Honesta, directa, con amor.</p>
+      <span class="sc-beneficio">Para decisiones, bloqueos y dirección de vida</span>
+      <a href="https://wa.me/56981620907?text=Hola%20Carolina,%20quiero%20agendar%20una%20lectura%20de%20Tarot" class="sc-cta" target="_blank" rel="noopener">Agendar lectura →</a>
+    </article>
+
+    <article class="sendero-card" data-delay="100">
+      <span class="sc-numero">II</span>
+      <span class="sc-glyph">🌙</span>
+      <h3 class="sc-h3">Rituales Personalizados</h3>
+      <p class="sc-p">Rituales creados específicamente para tus intenciones: amor, prosperidad, protección, sanación y manifestación consciente. Cada ritual es un acto sagrado.</p>
+      <span class="sc-beneficio">Para manifestar, sanar y protegerte</span>
+      <a href="https://wa.me/56981620907?text=Hola%20Carolina,%20quiero%20información%20sobre%20Rituales" class="sc-cta" target="_blank" rel="noopener">Consultar →</a>
+    </article>
+
+    <article class="sendero-card" data-delay="200">
+      <span class="sc-numero">III</span>
+      <span class="sc-glyph">⚡</span>
+      <h3 class="sc-h3">Limpiezas Energéticas</h3>
+      <p class="sc-p">Liberación de bloqueos, energías densas y patrones que te impiden avanzar. Renueva tu campo energético y vuelve a tu centro de poder.</p>
+      <span class="sc-beneficio">Para liberar lo que ya no te sirve</span>
+      <a href="https://wa.me/56981620907?text=Hola%20Carolina,%20quiero%20una%20Limpieza%20Energética" class="sc-cta" target="_blank" rel="noopener">Consultar →</a>
+    </article>
+
+    <article class="sendero-card" data-delay="300">
+      <span class="sc-numero">IV</span>
+      <span class="sc-glyph">🌿</span>
+      <h3 class="sc-h3">Guía Espiritual</h3>
+      <p class="sc-p">Acompañamiento personalizado para quienes están iniciando o profundizando su camino espiritual. Desde el corazón, con dirección y presencia real.</p>
+      <span class="sc-beneficio">Para encontrar tu camino propio</span>
+      <a href="https://wa.me/56981620907?text=Hola%20Carolina,%20quiero%20Guía%20Espiritual" class="sc-cta" target="_blank" rel="noopener">Consultar →</a>
+    </article>
+
+  </div>
+</section>
+
+
+<!-- Umbral 3 -->
+<div class="umbral" aria-hidden="true"><div class="umbral-linea"></div><span class="umbral-sigil">☽ III ☾</span><div class="umbral-linea"></div></div>
+
+
+<!-- ══════════════════════════════════════
+     IV. LOS MISTERIOS — CURSOS
+══════════════════════════════════════ -->
+<section id="los-misterios">
+
+  <div class="misterios-intro">
+    <span class="misterios-subtitulo">✦ Los misterios</span>
+    <h2 class="misterios-h2">Formación profunda.<br>Transformación real.</h2>
+    <p class="misterios-bajada">Elige tu iniciación.</p>
+  </div>
+
+  <!-- CURSO 1: GUARDIANES DE LUZ -->
+  <div class="curso-portal" id="cp-guardianes">
+    <div class="curso-portal-bg bg-grad-1" aria-hidden="true"></div>
+    <div class="curso-portal-inner">
+
+      <div class="curso-visual" id="cv-guardianes">
+        <div class="curso-img-wrap">
+          <!-- CAMBIAR: imagen del curso Guardianes de Luz -->
+          <img src="assets/img/guardianes-curso.jpg" alt="Curso Guardianes de Luz" loading="lazy"
+               onerror="this.parentElement.querySelector('.ci-placeholder').style.display='flex';this.style.display='none'">
+          <div class="ci-placeholder" style="display:none">
+            <span>🌙</span>
+            <span>Imagen Guardianes de Luz</span>
+          </div>
+          <span class="curso-badge-flotante">☽ Guardianes de Luz ☾</span>
+        </div>
+        <div class="curso-anillos" aria-hidden="true">
+          <div class="curso-anillo"></div>
+          <div class="curso-anillo"></div>
+        </div>
+      </div>
+
+      <div class="curso-contenido-portal" id="cc-guardianes">
+        <span class="c-eyebrow">✦ Introducción · Magia Wiccana Ecléctica</span>
+        <h3 class="c-titulo">Guardianes de Luz</h3>
+        <p class="c-eslogan">"El despertar de tu poder sanador"</p>
+        <p class="c-desc">
+          Un programa de iniciación completo para mujeres que sienten el llamado de la magia
+          pero no saben por dónde empezar — o que quieren profundizar con una guía real,
+          no tutoriales sueltos. Aprenderás a trabajar con tu energía, la luna, los cristales,
+          las hierbas y los rituales con propósito e intención.
+        </p>
+        <div class="c-bullets" id="bullets-guardianes">
+          <div class="c-bullet" data-delay="0"><span class="c-bullet-ico">✦</span><span>Conecta con tu energía y reconoce tus dones naturales</span></div>
+          <div class="c-bullet" data-delay="120"><span class="c-bullet-ico">✦</span><span>Trabaja con rituales lunares de forma autónoma y consciente</span></div>
+          <div class="c-bullet" data-delay="240"><span class="c-bullet-ico">✦</span><span>Usa cristales y hierbas mágicas con conocimiento real</span></div>
+          <div class="c-bullet" data-delay="360"><span class="c-bullet-ico">✦</span><span>Activa tu capacidad sanadora innata</span></div>
+          <div class="c-bullet" data-delay="480"><span class="c-bullet-ico">✦</span><span>Construye una práctica mágica propia, coherente y poderosa</span></div>
+        </div>
+        <div class="c-info-row">
+          <div class="c-info-item"><strong>En vivo</strong><span>Clases online</span></div>
+          <div class="c-info-item"><strong>Ritual</strong><span>De iniciación incl.</span></div>
+          <div class="c-info-item"><strong>Limitado</strong><span>Cupos exclusivos</span></div>
+        </div>
+        <p style="font-size:.85rem;color:rgba(245,237,224,.4);font-weight:300;margin-bottom:1.5rem;padding:.8rem 1rem;background:rgba(155,112,212,.06);border-left:2px solid var(--lila);border-radius:0 8px 8px 0;">
+          <strong style="color:var(--crema);">¿Para quién?</strong> Para mujeres que sienten que hay algo más, que han explorado solas y quieren un camino con estructura, profundidad y comunidad real.
+        </p>
+        <div class="c-btns">
+          <a href="https://wa.me/56981620907?text=Hola%20Carolina,%20quiero%20saber%20más%20sobre%20Guardianes%20de%20Luz"
+             class="btn-iniciar" target="_blank" rel="noopener">Quiero saber más ✦</a>
+          <a href="https://wa.me/56981620907?text=Hola%20Carolina,%20quiero%20reservar%20mi%20cupo%20en%20Guardianes%20de%20Luz"
+             class="btn-saber" target="_blank" rel="noopener">Reservar cupo</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Separador misterioso -->
+  <div style="display:flex;align-items:center;gap:2rem;padding:2rem 5%;opacity:.3" aria-hidden="true">
+    <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(155,112,212,.5),transparent)"></div>
+    <span style="font-family:var(--serif);font-size:.9rem;color:var(--dorado);letter-spacing:.4em">✦</span>
+    <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(155,112,212,.5),transparent)"></div>
+  </div>
+
+  <!-- CURSO 2: TAROT -->
+  <div class="curso-portal" id="cp-tarot">
+    <div class="curso-portal-bg bg-grad-2" aria-hidden="true"></div>
+    <div class="curso-portal-inner invertido">
+
+      <div class="curso-visual" id="cv-tarot">
+        <div class="curso-img-wrap">
+          <!-- CAMBIAR: imagen del curso Tarot -->
+          <img src="assets/img/tarot-curso.jpg" alt="Curso Tarot Rider Waite Terapéutico" loading="lazy"
+               onerror="this.parentElement.querySelector('.ci-placeholder').style.display='flex';this.style.display='none'">
+          <div class="ci-placeholder" style="display:none">
+            <span>🃏</span>
+            <span>Imagen Tarot Terapéutico</span>
+          </div>
+          <span class="curso-badge-flotante">✦ Mayo 2026</span>
+        </div>
+        <div class="curso-anillos" aria-hidden="true">
+          <div class="curso-anillo"></div>
+          <div class="curso-anillo"></div>
+        </div>
+      </div>
+
+      <div class="curso-contenido-portal" id="cc-tarot">
+        <span class="c-eyebrow">✦ Formación · 4 meses · Comienza mayo 2026</span>
+        <h3 class="c-titulo">Tarot Rider Waite<br>Terapéutico</h3>
+        <p class="c-eslogan">"Lee el tarot, sana tu vida, confía en tu intuición"</p>
+        <p class="c-desc">
+          Un programa de 4 meses para aprender a leer el Tarot Rider Waite desde un enfoque
+          terapéutico y espiritual. No solo memorizarás cartas — aprenderás a leer la energía,
+          a confiar en tu intuición y a usar el tarot como herramienta de autoconocimiento
+          y acompañamiento para otros.
+        </p>
+        <div class="c-bullets" id="bullets-tarot">
+          <div class="c-bullet" data-delay="0"><span class="c-bullet-ico">✦</span><span>Los 22 Arcanos Mayores y su significado profundo</span></div>
+          <div class="c-bullet" data-delay="120"><span class="c-bullet-ico">✦</span><span>Arcanos Menores: los 4 elementos (Fuego, Agua, Aire, Tierra)</span></div>
+          <div class="c-bullet" data-delay="240"><span class="c-bullet-ico">✦</span><span>Tiradas terapéuticas y cómo leer para otros con ética</span></div>
+          <div class="c-bullet" data-delay="360"><span class="c-bullet-ico">✦</span><span>Energía, intuición y consagración del mazo</span></div>
+          <div class="c-bullet" data-delay="480"><span class="c-bullet-ico">✦</span><span>Clases grabadas + práctica guiada + diploma opcional</span></div>
+        </div>
+        <div class="c-info-row">
+          <div class="c-info-item"><strong>4 meses</strong><span>16 clases</span></div>
+          <div class="c-info-item"><strong>Online</strong><span>Quedan grabadas</span></div>
+          <div class="c-info-item"><strong>Diploma</strong><span>Certificado opt.</span></div>
+        </div>
+        <div class="c-precio-bloque">
+          <div>
+            <span style="font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dorado);display:block;margin-bottom:.2rem;">Valor mensual</span>
+            <span class="c-precio-num">$25.000</span>
+            <span class="c-precio-det" style="display:block;">CLP · 4 cuotas · Facilitadora: Carolina González</span>
+          </div>
+        </div>
+        <div class="c-btns">
+          <a href="https://wa.me/56981620907?text=Hola%20Carolina,%20quiero%20reservar%20mi%20cupo%20en%20Tarot%20Rider%20Waite%20Terapéutico"
+             class="btn-iniciar" target="_blank" rel="noopener">Reservar cupo ✦</a>
+          <a href="https://wa.me/56981620907?text=Hola%20Carolina,%20quiero%20más%20información%20sobre%20el%20Tarot%20Terapéutico"
+             class="btn-saber" target="_blank" rel="noopener">Más información</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+
+<!-- Umbral 4 -->
+<div class="umbral" aria-hidden="true"><div class="umbral-linea"></div><span class="umbral-sigil">☽ IV ☾</span><div class="umbral-linea"></div></div>
+
+
+<!-- ══════════════════════════════════════
+     V. LAS VOCES — TESTIMONIOS
+══════════════════════════════════════ -->
+<section id="las-voces">
+  <div class="voces-header">
+    <span class="voces-pre">✦ Las voces</span>
+    <h2 class="voces-h2">Lo que dicen las <em>Guardianas</em></h2>
+  </div>
+  <div class="voces-grid">
+
+    <div class="voz-card destacada" data-delay="0">
+      <div class="voz-estrellas">★★★★★</div>
+      <p class="voz-texto">"Guardianes de Luz cambió mi vida de maneras que no puedo explicar del todo. Carolina tiene una forma de enseñar que te llega al alma. Empecé sintiéndome perdida espiritualmente y hoy tengo una práctica propia que me llena de sentido."</p>
+      <div class="voz-autora"><div class="voz-av">MP</div><div><span class="voz-nombre">Marcela P.</span><span class="voz-servicio">Guardianes de Luz</span></div></div>
+    </div>
+
+    <div class="voz-card" data-delay="100">
+      <div class="voz-estrellas">★★★★★</div>
+      <p class="voz-texto">"Tomé el curso de Tarot Terapéutico sin saber nada y hoy leo para mí y para personas cercanas con confianza. La metodología de Carolina es clara, profunda y muy bien estructurada. Vale cada peso."</p>
+      <div class="voz-autora"><div class="voz-av">CV</div><div><span class="voz-nombre">Catalina V.</span><span class="voz-servicio">Tarot Rider Waite Terapéutico</span></div></div>
+    </div>
+
+    <div class="voz-card" data-delay="200">
+      <div class="voz-estrellas">★★★★★</div>
+      <p class="voz-texto">"La lectura que me hizo Carolina fue un antes y un después. No es una lectura de 'lo que quieres oír' — es honesta, intuitiva y profunda. Me ayudó a tomar una decisión que venía postergando hace meses."</p>
+      <div class="voz-autora"><div class="voz-av">RG</div><div><span class="voz-nombre">Rocío G.</span><span class="voz-servicio">Lectura de Tarot</span></div></div>
+    </div>
+
+    <div class="voz-card destacada" data-delay="300">
+      <div class="voz-estrellas">★★★★★</div>
+      <p class="voz-texto">"Nunca pensé que aprender magia podía ser tan ordenado y tan poderoso al mismo tiempo. Carolina enseña con una combinación de conocimiento y presencia que no encuentras en YouTube. La comunidad también es un regalo."</p>
+      <div class="voz-autora"><div class="voz-av">AL</div><div><span class="voz-nombre">Andrea L.</span><span class="voz-servicio">Guardianes de Luz</span></div></div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- Umbral 5 -->
+<div class="umbral" aria-hidden="true"><div class="umbral-linea"></div><span class="umbral-sigil">☽ V ☾</span><div class="umbral-linea"></div></div>
+
+
+<!-- ══════════════════════════════════════
+     VI. EL UMBRAL FINAL — CTA
+══════════════════════════════════════ -->
+<section id="el-umbral-final">
+  <div class="uf-luz" aria-hidden="true"></div>
+  <div class="uf-anillos" aria-hidden="true">
+    <div class="uf-anillo"></div>
+    <div class="uf-anillo"></div>
+    <div class="uf-anillo"></div>
+  </div>
+  <div class="uf-inner" id="uf-inner">
+    <span class="uf-sigil">☽ ✦ ☾</span>
+    <h2 class="uf-h2">
+      ¿Estás lista para<br>
+      <span>despertar tu magia?</span>
+    </h2>
+    <p class="uf-sub">
+      Los cupos son limitados. Escríbeme hoy y hablamos sin compromiso
+      sobre qué camino es el tuyo.
+    </p>
+    <div class="uf-btns">
+      <a href="https://wa.me/56981620907?text=Hola%20Carolina,%20quiero%20información%20sobre%20Guardianes%20de%20Luz"
+         class="btn-portal-grande" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.115.549 4.099 1.51 5.823L.057 23.882l6.208-1.429A11.953 11.953 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.779 9.779 0 01-4.992-1.368l-.358-.213-3.686.847.893-3.574-.234-.371A9.775 9.775 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+        Entrar al portal ✦
+      </a>
+      <a href="#los-misterios" class="btn-portal">Ver los cursos</a>
+    </div>
+    <p class="uf-tel">+56 9 8162 0907</p>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     CONTACTO
+══════════════════════════════════════ -->
+<section id="el-contacto">
+  <div class="contacto-wrap">
+    <div class="c-info" id="c-info">
+      <span class="c-info-eyebrow">✦ El contacto</span>
+      <h3 class="c-info-h">¿Tienes preguntas?<br>Estoy aquí para ti.</h3>
+      <p class="c-info-p">La forma más rápida de conectar es por WhatsApp. También puedes dejarme un mensaje y te respondo en menos de 24 horas.</p>
+      <a href="https://wa.me/56981620907" class="c-dato" target="_blank" rel="noopener">
+        <span class="c-dato-ico">📱</span>+56 9 8162 0907
+      </a>
+      <div class="c-dato"><span class="c-dato-ico">✦</span>guardianesdeluz.cl</div>
+      <a href="https://wa.me/56981620907?text=Hola%20Carolina,%20quiero%20información%20sobre%20tus%20cursos"
+         class="btn-iniciar" style="margin-top:1.8rem;display:inline-flex;" target="_blank" rel="noopener">
+        Escríbeme por WhatsApp ✦
+      </a>
+    </div>
+    <div class="form-portal" id="form-portal">
+      <form class="form-portal-card" id="form" novalidate>
+        <div class="fp-fila">
+          <div class="fp-grupo"><label for="fn">Nombre</label><input type="text" id="fn" name="nombre" placeholder="Tu nombre" required autocomplete="given-name"></div>
+          <div class="fp-grupo"><label for="fe">Email</label><input type="email" id="fe" name="email" placeholder="tu@correo.com" required autocomplete="email"></div>
+        </div>
+        <div class="fp-grupo">
+          <label for="fi">¿Qué te interesa?</label>
+          <select id="fi" name="interes">
+            <option value="">Selecciona una opción</option>
+            <option>Guardianes de Luz – Magia Wiccana</option>
+            <option>Tarot Rider Waite Terapéutico</option>
+            <option>Lectura de Tarot individual</option>
+            <option>Ritual personalizado</option>
+            <option>Limpieza energética</option>
+            <option>Guía espiritual</option>
+            <option>Aún no lo sé</option>
+          </select>
+        </div>
+        <div class="fp-grupo">
+          <label for="fm">Mensaje</label>
+          <textarea id="fm" name="mensaje" rows="4" placeholder="Cuéntame en qué puedo acompañarte…"></textarea>
+        </div>
+        <button type="submit" class="btn-iniciar" style="width:100%;justify-content:center;">
+          Enviar mensaje ✦
+        </button>
+      </form>
+      <div class="fp-ok" id="fp-ok">✦ Gracias por escribirme. Te respondo pronto con toda mi presencia.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <p class="f-logo">Guardianes de Luz</p>
+      <p class="f-desc">Escuela de Magia Wiccana Ecléctica<br>El despertar de tu poder sanador</p>
+      <p class="f-fac">Carolina González · Sacerdotisa de Luz</p>
+    </div>
+    <nav class="f-col" aria-label="Cursos"><h4>Cursos</h4><a href="#cp-guardianes">Guardianes de Luz</a><a href="#cp-tarot">Tarot Rider Waite</a></nav>
+    <nav class="f-col" aria-label="Servicios"><h4>Servicios</h4><a href="#el-sendero">Lectura de Tarot</a><a href="#el-sendero">Rituales</a><a href="#el-sendero">Limpiezas</a><a href="#el-sendero">Guía espiritual</a></nav>
+    <div class="f-col"><h4>Contacto</h4><a href="https://wa.me/56981620907" target="_blank" rel="noopener">+56 9 8162 0907</a><a href="#el-contacto">Enviar mensaje</a></div>
+  </div>
+  <div class="footer-bottom">
+    <span class="f-copy">© 2025 Guardianes de Luz · Carolina González · Todos los derechos reservados</span>
+    <span class="f-eslogan">☽ Con amor, para tu alma ✦ ☾</span>
+  </div>
+</footer>
+
+<!-- WhatsApp flotante -->
+<a href="https://wa.me/56981620907?text=Hola%20Carolina" class="wa-float" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.115.549 4.099 1.51 5.823L.057 23.882l6.208-1.429A11.953 11.953 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.779 9.779 0 01-4.992-1.368l-.358-.213-3.686.847.893-3.574-.234-.371A9.775 9.775 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+</a>
+
+<script src="script.js"></script>
+</body>
+</html>
